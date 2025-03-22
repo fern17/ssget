@@ -6,9 +6,21 @@ ENABLE_TESTING()
 SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
+SET(POCO_ROOT $ENV{POCO_ROOT})
+SET(POCO_INCLUDE_DIR "${POCO_ROOT}/include")
+SET(POCO_LIB_DIR "${POCO_ROOT}/lib")
+INCLUDE_DIRECTORIES(${POCO_INCLUDE_DIR})
+LINK_DIRECTORIES(${POCO_LIB_DIR})
+
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-ADD_EXECUTABLE(ssget main.cpp)
+ADD_EXECUTABLE(ssget main.cpp WebDownloader.cpp)
+
+TARGET_LINK_LIBRARIES(ssget PocoNetSSLWin$<$<CONFIG:Debug>:d>
+                            PocoCrypto$<$<CONFIG:Debug>:d>
+                            PocoFoundation$<$<CONFIG:Debug>:d>
+                            PocoUtil$<$<CONFIG:Debug>:d>
+                            PocoNet$<$<CONFIG:Debug>:d>)
 
 FUNCTION(ADD_SSGET_TEST TEST_NAME ARGUMENTS EXPECTED_OUTPUT)
     ADD_TEST(
