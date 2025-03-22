@@ -27,6 +27,8 @@ public:
 		return false;
 	}
 
+	bool getProducts(bool supportedOnly, std::list<std::string>& products);
+
 private:
 	Poco::JSON::Object::Ptr jsonObject;
 };
