@@ -16,11 +16,20 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 ADD_EXECUTABLE(ssget main.cpp WebDownloader.cpp JsonParser.cpp)
 
-TARGET_LINK_LIBRARIES(ssget PocoNetSSLWin$<$<CONFIG:Debug>:d>
-                            PocoCrypto$<$<CONFIG:Debug>:d>
-                            PocoFoundation$<$<CONFIG:Debug>:d>
-                            PocoUtil$<$<CONFIG:Debug>:d>
-                            PocoNet$<$<CONFIG:Debug>:d>)
+IF(WIN32)
+    TARGET_LINK_LIBRARIES(ssget PocoNetSSLWin$<$<CONFIG:Debug>:d>
+                                PocoCrypto$<$<CONFIG:Debug>:d>
+                                PocoFoundation$<$<CONFIG:Debug>:d>
+                                PocoUtil$<$<CONFIG:Debug>:d>
+                                PocoNet$<$<CONFIG:Debug>:d>)
+ELSE()
+    TARGET_LINK_LIBRARIES(ssget PocoNetSSL$<$<CONFIG:Debug>:d>
+                                PocoCrypto$<$<CONFIG:Debug>:d>
+                                PocoJSON$<$<CONFIG:Debug>:d>
+                                PocoFoundation$<$<CONFIG:Debug>:d>
+                                PocoUtil$<$<CONFIG:Debug>:d>
+                                PocoNet$<$<CONFIG:Debug>:d>)
+ENDIF()
 
 FUNCTION(ADD_SSGET_TEST TEST_NAME)
     SET(ARGUMENTS ${ARGN})
