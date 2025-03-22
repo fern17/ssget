@@ -14,6 +14,7 @@ void printHelp()
     std::cout << "\tfetch products: fetch the list of all products" << std::endl;
     std::cout << "\tfetch supported_products: fetch the list of all currently supported products" << std::endl;
     std::cout << "\tfetch current_lts: fetch the current LTS version" << std::endl;
+    std::cout << "\tfetch sha256 [version] [arch] [date]: fetch the SHA256 of the disk image for the given version" << std::endl;
 }
 
 bool getValue(JsonParser &jsonParser, const std::string &key, std::string &outputString)

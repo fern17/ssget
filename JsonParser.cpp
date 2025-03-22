@@ -1,7 +1,7 @@
 #include "JsonParser.h"
 #include <Poco/JSON/Parser.h>
 #include <Poco/Dynamic/Var.h>
-#include <Poco/JSON/Array.h>
+#include <Poco/Exception.h>
 
 constexpr std::string_view UBUNTU_VERSION_PREFIX = "com.ubuntu.cloud:server";
 
