@@ -12,6 +12,23 @@ JsonParser::JsonParser(const std::string &jsonContents)
 	jsonObject = result.extract<Poco::JSON::Object::Ptr>();
 }
 
+bool JsonParser::getStringValue(const std::string &key, std::string &value)
+{
+	if (jsonObject)
+	{
+		try
+		{
+			value = jsonObject->getValue<std::string>(key);
+			return true;
+		}
+		catch (...)
+		{
+			// silently fail
+		}
+	}
+	return false;
+}
+
 bool JsonParser::getProducts(bool supportedOnly, std::list<std::string> &productsList)
 {
 	if (jsonObject)

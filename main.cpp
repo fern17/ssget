@@ -19,7 +19,7 @@ void printHelp()
 bool getValue(JsonParser &jsonParser, const std::string &key, std::string &outputString)
 {
     std::string value;
-    bool result = jsonParser.get<std::string>(key, value);
+    bool result = jsonParser.getStringValue(key, value);
     if (result)
     {
         outputString += key + " " + value + "\n";

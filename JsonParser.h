@@ -8,25 +8,8 @@ class JsonParser
 {
 public:
 	JsonParser(const std::string &jsonContents);
-	
-	template<typename T>
-	bool get(const std::string &key, T &value)
-	{
-		if (jsonObject)
-		{
-			try
-			{
-				value = jsonObject->getValue<T>(key);
-				return true;
-			}
-			catch (...)
-			{
-				// silently fail
-			}
-		}
-		return false;
-	}
 
+	bool getStringValue(const std::string &key, std::string &value);
 	bool getProducts(bool supportedOnly, std::list<std::string> &products);
 	bool getCurrentLTSVersion(std::string &version);
 	bool getImageDiskSHA256(const std::string &version, const std::string &arch, const std::string &date, std::string &sha256Value);
