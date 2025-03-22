@@ -14,7 +14,7 @@ LINK_DIRECTORIES(${POCO_LIB_DIR})
 
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-ADD_EXECUTABLE(ssget main.cpp WebDownloader.cpp)
+ADD_EXECUTABLE(ssget main.cpp WebDownloader.cpp JsonParser.cpp)
 
 TARGET_LINK_LIBRARIES(ssget PocoNetSSLWin$<$<CONFIG:Debug>:d>
                             PocoCrypto$<$<CONFIG:Debug>:d>
@@ -22,7 +22,9 @@ TARGET_LINK_LIBRARIES(ssget PocoNetSSLWin$<$<CONFIG:Debug>:d>
                             PocoUtil$<$<CONFIG:Debug>:d>
                             PocoNet$<$<CONFIG:Debug>:d>)
 
-FUNCTION(ADD_SSGET_TEST TEST_NAME ARGUMENTS EXPECTED_OUTPUT)
+FUNCTION(ADD_SSGET_TEST TEST_NAME)
+    SET(ARGUMENTS ${ARGN})
+    LIST(POP_BACK ARGUMENTS EXPECTED_OUTPUT)
     ADD_TEST(
         NAME ${TEST_NAME}
         COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/ssget ${ARGUMENTS}
@@ -30,8 +32,7 @@ FUNCTION(ADD_SSGET_TEST TEST_NAME ARGUMENTS EXPECTED_OUTPUT)
     SET_TESTS_PROPERTIES(${TEST_NAME} PROPERTIES PASS_REGULAR_EXPRESSION ${EXPECTED_OUTPUT})
 ENDFUNCTION()
 
-ADD_SSGET_TEST(Ping "ping" "pong")
-ADD_SSGET_TEST(Pong "pong" "ping")
-ADD_SSGET_TEST(Help "help" "ssget")
-ADD_SSGET_TEST(NoArg "" "ssget")
 ADD_SSGET_TEST(UnknownArg "unknown" "Unknown argument\nssget")
+ADD_SSGET_TEST(Fetch fetch "Missing key to fetch")
+ADD_SSGET_TEST(FetchInvalid fetch invalid_key "Invalid key")
+ADD_SSGET_TEST(FetchContentId fetch content_id "content_id com.ubuntu.cloud:released:download")

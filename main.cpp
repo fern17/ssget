@@ -2,12 +2,15 @@
 #include <cstring>
 #include <sstream>
 #include "WebDownloader.h"
+#include "JsonParser.h"
 
 constexpr std::string_view url = "https://cloud-images.ubuntu.com/releases/streams/v1/com.ubuntu.cloud:released:download.json";
 
 void printHelp()
 {
     std::cout << "ssget" << std::endl;
+    std::cout << "Usage:" << std::endl;
+    std::cout << "\tfetch [key]: fetch key from the json file" << std::endl;
 }
 
 int main(int argc, char *argv[])
@@ -17,16 +20,6 @@ int main(int argc, char *argv[])
         printHelp();
         return 0;
     }
-    if (strcmp(argv[1], "ping") == 0)
-    {
-        std::cout << "pong" << std::endl;
-        return 0;
-    }
-    else if (strcmp(argv[1], "pong") == 0)
-    {
-        std::cout << "ping" << std::endl;
-        return 0;
-    }
     else if (strcmp(argv[1], "help") == 0)
     {
         printHelp();
@@ -34,13 +27,31 @@ int main(int argc, char *argv[])
     }
     else if (strcmp(argv[1], "fetch") == 0)
     {
+        if (argc < 3)
+        {
+            std::cout << "Missing key to fetch" << std::endl;
+            return 1;
+        }
+        
         WebDownloader webDownloader(url.data());
-        std::string contents;
-        bool result = webDownloader.fetchContents(contents);
+        std::string webContents;
+        bool result = webDownloader.fetchContents(webContents);
         if (result)
         { 
-            std::cout << contents << std::endl;
-            return 0;
+            JsonParser jsonParser(webContents);
+            std::string key(argv[2]);
+            std::string value;
+            bool result = jsonParser.get<std::string>(key, value);
+            if (result)
+            {
+                std::cout << key << " " << value << std::endl;
+                return 0;
+            }
+            else
+            {
+                std::cout << "Invalid key" << std::endl;
+                return 1;
+            }
         }
         else
         {
