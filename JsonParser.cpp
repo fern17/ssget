@@ -3,6 +3,8 @@
 #include <Poco/Dynamic/Var.h>
 #include <Poco/JSON/Array.h>
 
+constexpr std::string_view UBUNTU_VERSION_PREFIX = "com.ubuntu.cloud:server";
+
 JsonParser::JsonParser(const std::string &jsonContents) 
 {
 	Poco::JSON::Parser parser;
@@ -73,6 +75,56 @@ bool JsonParser::getCurrentLTSVersion(std::string &currentLTSVersion)
 			{
 				currentLTSVersion = supportedLTSVersions.back();
 				return true;
+			}
+		}
+		catch (...)
+		{
+			// silently fail
+		}
+	}
+	return false;
+}
+
+bool JsonParser::getImageDiskSHA256(const std::string &version,
+									const std::string &arch,
+									const std::string &date,
+									std::string &sha256Value)
+{
+	if (jsonObject)
+	{
+		try
+		{
+			Poco::JSON::Object::Ptr productsObject = jsonObject->getObject("products");
+			sha256Value.clear();
+			if (!productsObject)
+			{
+				return false;
+			}
+			std::string fullVersionName = std::string(UBUNTU_VERSION_PREFIX) + ":" + version + ":" + arch;
+			if (productsObject->has(fullVersionName))
+			{
+				Poco::JSON::Object::Ptr productData = productsObject->getObject(fullVersionName);
+				if (productData->has("versions"))
+				{
+					Poco::JSON::Object::Ptr versionsData = productData->getObject("versions");
+					if (versionsData->has(date))
+					{
+						Poco::JSON::Object::Ptr dateData = versionsData->getObject(date);
+						if (dateData->has("items"))
+						{
+							Poco::JSON::Object::Ptr itemsData = dateData->getObject("items");
+							if (itemsData->has("disk1.img"))
+							{
+								Poco::JSON::Object::Ptr diskImgData = itemsData->getObject("disk1.img");
+								if (diskImgData->has("sha256"))
+								{
+									sha256Value = diskImgData->optValue<std::string>("sha256", "");
+									return true;
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 		catch (...)

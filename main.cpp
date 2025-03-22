@@ -54,6 +54,21 @@ bool getCurrentLTSVersion(JsonParser &jsonParser, std::string &outputString)
     return result;
 }
 
+bool getDiskImageSHA256(JsonParser &jsonParser,
+                        const std::string &version,
+                        const std::string &arch,
+                        const std::string &date,
+                        std::string &outputString)
+{
+    std::string sha256Value;
+    bool result = jsonParser.getImageDiskSHA256(version, arch, date, sha256Value);
+    if (result)
+    {
+        outputString += "SHA256: " + sha256Value;
+    }
+    return result;
+}
+
 int main(int argc, char *argv[])
 {
     if (argc < 2)
@@ -95,6 +110,18 @@ int main(int argc, char *argv[])
             {
                 result = getCurrentLTSVersion(jsonParser, outputString);
             }
+            else if (key == "sha256")
+            {
+                if (argc < 6)
+                {
+                    std::cout << "One or more arguments are missing in order to fetch sha256" << std::endl;
+                    return 1;
+                }
+                std::string version(argv[3]);
+                std::string arch(argv[4]);
+                std::string date(argv[5]);
+                result = getDiskImageSHA256(jsonParser, version, arch, date, outputString);
+;            }
             else
             {
                 result = getValue(jsonParser, key, outputString);

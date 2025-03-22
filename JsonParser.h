@@ -29,6 +29,7 @@ public:
 
 	bool getProducts(bool supportedOnly, std::list<std::string> &products);
 	bool getCurrentLTSVersion(std::string &version);
+	bool getImageDiskSHA256(const std::string &version, const std::string &arch, const std::string &date, std::string &sha256Value);
 
 private:
 	Poco::JSON::Object::Ptr jsonObject;

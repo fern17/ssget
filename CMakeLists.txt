@@ -39,3 +39,7 @@ ADD_SSGET_TEST(FetchContentId fetch content_id "content_id com.ubuntu.cloud:rele
 ADD_SSGET_TEST(FetchProducts fetch products "Products:\n- com.ubuntu.cloud:server:10.04:amd64")
 ADD_SSGET_TEST(FetchSupportedProducts fetch supported_products "Supported products:\n- com.ubuntu.cloud:server:20.04:amd64")
 ADD_SSGET_TEST(FetchCurrentLTS fetch current_lts "Latest LTS version: 24.04 LTS")
+ADD_SSGET_TEST(FetchSHA2410 fetch sha256 24.10 amd64 20241009 "SHA256: b1b653186a01eb75bacb6bf15eac494d888f61f7adc3084e3d94fd117ddc82f5")
+ADD_SSGET_TEST(FetchSHA2204 fetch sha256 22.04 amd64 20220902 "SHA256: c777670007cc5f132417b9e0bc01367ccfc2a989951ffa225bb1952917c3aa81")
+ADD_SSGET_TEST(FetchSHA1104 fetch sha256 11.04 i386 20121028 "SHA256: 39c19059bbe3eff7ef81a609e21445a173ef1ce7fa45d7e16b8d7e3bbabb0c41")
+ADD_SSGET_TEST(FetchSHAIncomplete fetch sha256 "One or more arguments are missing in order to fetch sha256")
