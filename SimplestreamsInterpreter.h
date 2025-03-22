@@ -1,8 +1,9 @@
 #ifndef SIMPLESTREAMSINTERPRETER_H
 #define SIMPLESTREAMSINTERPRETER_H
 
+#include "JsonInterpreter.h"
 #include <string>
-#include <Poco/JSON/Object.h>
+#include <list>
 
 /* class SimplestreamsInterpreter
 * This class takes a string that represents a JSON file
@@ -10,7 +11,7 @@
 * The file is supposed to be in the SimpleStreams schema
 * https://canonical-simplestreams.readthedocs-hosted.com/en/latest/reference/streams-product-jsonschema/#jsonschema-product
 */
-class SimplestreamsInterpreter
+class SimplestreamsInterpreter : public JsonInterpreter
 {
 public:
 	/* SimplestreamsInterpreter constructor
@@ -46,11 +47,6 @@ public:
 	* Return true if successfull, false otherwise
 	*/
 	bool getImageDiskSHA256(const std::string &version, const std::string &arch, const std::string &date, std::string &sha256Value);
-
-private:
-	/* jsonObject: JSON structure read from the input string
-	*/
-	Poco::JSON::Object::Ptr jsonObject;
 };
 
 #endif

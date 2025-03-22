@@ -14,7 +14,7 @@ LINK_DIRECTORIES(${POCO_LIB_DIR})
 
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-ADD_EXECUTABLE(ssget main.cpp WebDownloader.cpp SimplestreamsInterpreter.cpp)
+ADD_EXECUTABLE(ssget main.cpp WebDownloader.cpp JsonInterpreter.cpp SimplestreamsInterpreter.cpp)
 
 IF(WIN32)
     TARGET_LINK_LIBRARIES(ssget PocoNetSSLWin$<$<CONFIG:Debug>:d>

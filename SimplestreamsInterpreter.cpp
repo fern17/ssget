@@ -1,15 +1,12 @@
 #include "SimplestreamsInterpreter.h"
-#include <Poco/JSON/Parser.h>
 #include <Poco/Dynamic/Var.h>
 #include <Poco/Exception.h>
 
 constexpr std::string_view UBUNTU_VERSION_PREFIX = "com.ubuntu.cloud:server";
 
 SimplestreamsInterpreter::SimplestreamsInterpreter(const std::string &jsonContents) 
+	: JsonInterpreter(jsonContents)
 {
-	Poco::JSON::Parser parser;
-	Poco::Dynamic::Var result = parser.parse(jsonContents);
-	jsonObject = result.extract<Poco::JSON::Object::Ptr>();
 }
 
 bool SimplestreamsInterpreter::getStringValue(const std::string &key, std::string &value)
