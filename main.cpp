@@ -13,6 +13,7 @@ void printHelp()
     std::cout << "\tfetch [key]: fetch key from the json file" << std::endl;
     std::cout << "\tfetch products: fetch the list of all products" << std::endl;
     std::cout << "\tfetch supported_products: fetch the list of all currently supported products" << std::endl;
+    std::cout << "\tfetch current_lts: fetch the current LTS version" << std::endl;
 }
 
 bool getValue(JsonParser &jsonParser, const std::string &key, std::string &outputString)
@@ -38,6 +39,17 @@ bool getProducts(JsonParser &jsonParser, bool supportedOnly, std::string &output
         {
             outputString += "- " + prod + "\n";
         }
+    }
+    return result;
+}
+
+bool getCurrentLTSVersion(JsonParser &jsonParser, std::string &outputString)
+{
+    std::string version;
+    bool result = jsonParser.getCurrentLTSVersion(version);
+    if (result)
+    {
+        outputString += "Latest LTS version: " + version + "\n";
     }
     return result;
 }
@@ -78,6 +90,10 @@ int main(int argc, char *argv[])
             else if (key == "supported_products")
             {
                 result = getProducts(jsonParser, true, outputString);
+            }
+            else if (key == "current_lts")
+            {
+                result = getCurrentLTSVersion(jsonParser, outputString);
             }
             else
             {

@@ -27,7 +27,8 @@ public:
 		return false;
 	}
 
-	bool getProducts(bool supportedOnly, std::list<std::string>& products);
+	bool getProducts(bool supportedOnly, std::list<std::string> &products);
+	bool getCurrentLTSVersion(std::string &version);
 
 private:
 	Poco::JSON::Object::Ptr jsonObject;
