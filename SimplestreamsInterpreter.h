@@ -1,22 +1,22 @@
-#ifndef JSONPARSER_H
-#define JSONPARSER_H
+#ifndef SIMPLESTREAMSINTERPRETER_H
+#define SIMPLESTREAMSINTERPRETER_H
 
 #include <string>
 #include <Poco/JSON/Object.h>
 
-/* class JsonParser
+/* class SimplestreamsInterpreter
 * This class takes a string that represents a JSON file
 * and allows the client to retrieve specific data from the file
 * The file is supposed to be in the SimpleStreams schema
 * https://canonical-simplestreams.readthedocs-hosted.com/en/latest/reference/streams-product-jsonschema/#jsonschema-product
 */
- class JsonParser
+class SimplestreamsInterpreter
 {
 public:
-	/* JsonParser constructor
+	/* SimplestreamsInterpreter constructor
 	* jsonContents: string representing the json file contents
 	*/
-	JsonParser(const std::string &jsonContents);
+	SimplestreamsInterpreter(const std::string &jsonContents);
 
 	/* getStringValue: get the value of a global key
 	* key: the key to retrieve its value

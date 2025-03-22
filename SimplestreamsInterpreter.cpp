@@ -1,18 +1,18 @@
-#include "JsonParser.h"
+#include "SimplestreamsInterpreter.h"
 #include <Poco/JSON/Parser.h>
 #include <Poco/Dynamic/Var.h>
 #include <Poco/Exception.h>
 
 constexpr std::string_view UBUNTU_VERSION_PREFIX = "com.ubuntu.cloud:server";
 
-JsonParser::JsonParser(const std::string &jsonContents) 
+SimplestreamsInterpreter::SimplestreamsInterpreter(const std::string &jsonContents) 
 {
 	Poco::JSON::Parser parser;
 	Poco::Dynamic::Var result = parser.parse(jsonContents);
 	jsonObject = result.extract<Poco::JSON::Object::Ptr>();
 }
 
-bool JsonParser::getStringValue(const std::string &key, std::string &value)
+bool SimplestreamsInterpreter::getStringValue(const std::string &key, std::string &value)
 {
 	if (jsonObject)
 	{
@@ -29,7 +29,7 @@ bool JsonParser::getStringValue(const std::string &key, std::string &value)
 	return false;
 }
 
-bool JsonParser::getProducts(bool supportedOnly, std::list<std::string> &productsList)
+bool SimplestreamsInterpreter::getProducts(bool supportedOnly, std::list<std::string> &productsList)
 {
 	if (jsonObject)
 	{
@@ -61,7 +61,7 @@ bool JsonParser::getProducts(bool supportedOnly, std::list<std::string> &product
 	return false;
 }
 
-bool JsonParser::getCurrentLTSVersion(std::string &currentLTSVersion)
+bool SimplestreamsInterpreter::getCurrentLTSVersion(std::string &currentLTSVersion)
 {
 	if (jsonObject)
 	{
@@ -102,7 +102,7 @@ bool JsonParser::getCurrentLTSVersion(std::string &currentLTSVersion)
 	return false;
 }
 
-bool JsonParser::getImageDiskSHA256(const std::string &version,
+bool SimplestreamsInterpreter::getImageDiskSHA256(const std::string &version,
 									const std::string &arch,
 									const std::string &date,
 									std::string &sha256Value)

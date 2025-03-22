@@ -2,7 +2,7 @@
 #include <cstring>
 #include <sstream>
 #include "WebDownloader.h"
-#include "JsonParser.h"
+#include "SimplestreamsInterpreter.h"
 
 constexpr std::string_view url = "https://cloud-images.ubuntu.com/releases/streams/v1/com.ubuntu.cloud:released:download.json";
 
@@ -17,10 +17,10 @@ void printHelp()
     std::cout << "\tfetch sha256 [version] [arch] [date]: fetch the SHA256 of the disk image for the given version" << std::endl;
 }
 
-bool getValue(JsonParser &jsonParser, const std::string &key, std::string &outputString)
+bool getValue(SimplestreamsInterpreter &simplestreamsInterpreter, const std::string &key, std::string &outputString)
 {
     std::string value;
-    bool result = jsonParser.getStringValue(key, value);
+    bool result = simplestreamsInterpreter.getStringValue(key, value);
     if (result)
     {
         outputString += key + " " + value + "\n";
@@ -28,10 +28,10 @@ bool getValue(JsonParser &jsonParser, const std::string &key, std::string &outpu
     return result;
 }
 
-bool getProducts(JsonParser &jsonParser, bool supportedOnly, std::string &outputString)
+bool getProducts(SimplestreamsInterpreter &simplestreamsInterpreter, bool supportedOnly, std::string &outputString)
 {
     std::list<std::string> products;
-    bool result = jsonParser.getProducts(supportedOnly, products);
+    bool result = simplestreamsInterpreter.getProducts(supportedOnly, products);
     if (result)
     {
         outputString.clear();
@@ -44,10 +44,10 @@ bool getProducts(JsonParser &jsonParser, bool supportedOnly, std::string &output
     return result;
 }
 
-bool getCurrentLTSVersion(JsonParser &jsonParser, std::string &outputString)
+bool getCurrentLTSVersion(SimplestreamsInterpreter &simplestreamsInterpreter, std::string &outputString)
 {
     std::string version;
-    bool result = jsonParser.getCurrentLTSVersion(version);
+    bool result = simplestreamsInterpreter.getCurrentLTSVersion(version);
     if (result)
     {
         outputString += "Latest LTS version: " + version + "\n";
@@ -55,14 +55,14 @@ bool getCurrentLTSVersion(JsonParser &jsonParser, std::string &outputString)
     return result;
 }
 
-bool getDiskImageSHA256(JsonParser &jsonParser,
+bool getDiskImageSHA256(SimplestreamsInterpreter &simplestreamsInterpreter,
                         const std::string &version,
                         const std::string &arch,
                         const std::string &date,
                         std::string &outputString)
 {
     std::string sha256Value;
-    bool result = jsonParser.getImageDiskSHA256(version, arch, date, sha256Value);
+    bool result = simplestreamsInterpreter.getImageDiskSHA256(version, arch, date, sha256Value);
     if (result)
     {
         outputString += "SHA256: " + sha256Value;
@@ -95,21 +95,21 @@ int main(int argc, char *argv[])
         bool result = webDownloader.fetchContents(webContents);
         if (result)
         { 
-            JsonParser jsonParser(webContents);
+            SimplestreamsInterpreter simplestreamsInterpreter(webContents);
             std::string key(argv[2]);
             std::string outputString;
             bool result = false;
             if (key == "products")
             {
-                result = getProducts(jsonParser, false, outputString);
+                result = getProducts(simplestreamsInterpreter, false, outputString);
             }
             else if (key == "supported_products")
             {
-                result = getProducts(jsonParser, true, outputString);
+                result = getProducts(simplestreamsInterpreter, true, outputString);
             }
             else if (key == "current_lts")
             {
-                result = getCurrentLTSVersion(jsonParser, outputString);
+                result = getCurrentLTSVersion(simplestreamsInterpreter, outputString);
             }
             else if (key == "sha256")
             {
@@ -121,11 +121,11 @@ int main(int argc, char *argv[])
                 std::string version(argv[3]);
                 std::string arch(argv[4]);
                 std::string date(argv[5]);
-                result = getDiskImageSHA256(jsonParser, version, arch, date, outputString);
+                result = getDiskImageSHA256(simplestreamsInterpreter, version, arch, date, outputString);
 ;            }
             else
             {
-                result = getValue(jsonParser, key, outputString);
+                result = getValue(simplestreamsInterpreter, key, outputString);
             }
             
             if (result)
